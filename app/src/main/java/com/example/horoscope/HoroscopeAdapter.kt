@@ -11,7 +11,7 @@ import com.example.horoscope.HoroscopeAdapter.HoroscopeViewHolder
 
 
 
-class HoroscopeAdapter(val items : List<Horoscope>) : Adapter<HoroscopeViewHolder>() {
+class HoroscopeAdapter(val items : List<Horoscope>, val onClick : (Int) -> Unit) : Adapter<HoroscopeViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HoroscopeViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_horoscope,parent,false)
@@ -26,6 +26,10 @@ class HoroscopeAdapter(val items : List<Horoscope>) : Adapter<HoroscopeViewHolde
     override fun onBindViewHolder(holder: HoroscopeViewHolder, position: Int) {
         val horoscope = items[position]
         holder.render(horoscope)
+        holder.itemView.setOnClickListener{
+            println(horoscope.id)
+            // depende del activity no del adapter para redireccionar, adapter recoge el click
+        }
     }
 
 
@@ -36,7 +40,9 @@ class HoroscopeAdapter(val items : List<Horoscope>) : Adapter<HoroscopeViewHolde
         val dateTextView : TextView = view.findViewById(R.id.dateTextView)
 
         fun render(horoscope: Horoscope){
-            TODO()
+            iconImageView.setImageResource(horoscope.icon)
+            nameTextView.setText(horoscope.name)
+            dateTextView.setText(horoscope.dates)
 
 
         }
