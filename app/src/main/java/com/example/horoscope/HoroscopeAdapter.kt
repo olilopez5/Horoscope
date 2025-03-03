@@ -26,9 +26,11 @@ class HoroscopeAdapter(val items : List<Horoscope>, val onClick : (Int) -> Unit)
     override fun onBindViewHolder(holder: HoroscopeViewHolder, position: Int) {
         val horoscope = items[position]
         holder.render(horoscope)
+
+        //vista raiz de toda la celda, definido en view holder
         holder.itemView.setOnClickListener{
-            println(horoscope.id)
-            // depende del activity no del adapter para redireccionar, adapter recoge el click
+            onClick(position)
+            // depende del activity no del adapter para redireccionar, adapter recoge el click , es una buena práctica
         }
     }
 
