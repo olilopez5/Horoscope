@@ -16,9 +16,10 @@ import androidx.recyclerview.widget.RecyclerView
 class MainActivity : AppCompatActivity() {
 
 
-    val horoscopeList : List<Horoscope> = Horoscope.horoscopeList
+    var horoscopeList : List<Horoscope> = Horoscope.horoscopeList
 
     lateinit var recyclerView : RecyclerView
+    lateinit var adapter : HoroscopeAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 
         // adapter recoge el click pero o sabe que hacer
         //recibe un solo parametro
-        val adapter = HoroscopeAdapter(horoscopeList){ position ->
+        adapter = HoroscopeAdapter(horoscopeList){ position ->
             val horoscope = horoscopeList[position]
 
             //Toast.makeText(this, horoscopo.name,Toast.LENGTH_SHORT).show()
@@ -65,7 +66,12 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                Log.i("SEARCH",newText)
+//                Log.i("SEARCH",newText)
+                // se filtra sobre la lista original
+                horoscopeList = Horoscope.horoscopeList.filter {
+                    getString(it.name).contains(newText, ignoreCase = true)
+                }
+                adapter.updateIt(horoscopeList)
                 return false
             }
 

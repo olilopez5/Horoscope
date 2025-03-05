@@ -11,7 +11,7 @@ import com.example.horoscope.HoroscopeAdapter.HoroscopeViewHolder
 
 
 
-class HoroscopeAdapter(val items : List<Horoscope>, val onClick : (Int) -> Unit) : Adapter<HoroscopeViewHolder>() {
+class HoroscopeAdapter(var items : List<Horoscope>, val onClick : (Int) -> Unit) : Adapter<HoroscopeViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HoroscopeViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_horoscope,parent,false)
@@ -32,6 +32,14 @@ class HoroscopeAdapter(val items : List<Horoscope>, val onClick : (Int) -> Unit)
             onClick(position)
             // depende del activity no del adapter para redireccionar, adapter recoge el click , es una buena práctica
         }
+
+    }
+
+    fun updateIt(items: List<Horoscope>) {
+        //asignar nuevos elementos
+        this.items = items
+        //actualizar los cambios, hay una nueva lista el recycler view
+        notifyDataSetChanged()
     }
 
 
