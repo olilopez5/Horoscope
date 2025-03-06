@@ -25,9 +25,9 @@ class DetailActivity : AppCompatActivity() {
     lateinit var horoscope: Horoscope
 
     var isFav = false
-    private lateinit var favoriteMenu: Menu
+    private lateinit var favoriteMenu: MenuItem
 
-    private val session = SessionManager(this)
+    private lateinit var session: SessionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,9 +39,13 @@ class DetailActivity : AppCompatActivity() {
             insets
         }
 
+        session = SessionManager(this)
+
         val id = intent.getStringExtra(EXTRA_HOROSCOPE_ID)!!  // !! para no tratar los nulos
         horoscope = Horoscope.findById(id)
 
+        //guardar el favorito en la sesion
+        isFav = session.isFav(id)
 
        initView()
 
@@ -57,8 +61,7 @@ class DetailActivity : AppCompatActivity() {
         return true
     }
 
-
-        override fun onContextItemSelected(item: MenuItem): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
             return when (item.itemId) {
                 R.id.menu_favorite -> {
@@ -68,16 +71,17 @@ class DetailActivity : AppCompatActivity() {
                     if(isFav){
                         session.setFav(horoscope.id)
                     }else{
-                        session.setFav()
+                        session.setFav("")
                     }
-                    session.setFav()
+                    //resultado , icono fav seleccionado o no
+                    setFavIcon()
                     true
                 }
                 R.id.menu_share -> {
                     //Log.i("MENU","COMPARTIR")
                     val sendIntent = Intent()
                     sendIntent.setAction(Intent.ACTION_SEND)
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.")
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, "What´s your horoscope ?")
                     //MIME TYPE, el tipo del contenido y su extension
                     sendIntent.setType("text/plain")
 

@@ -21,6 +21,29 @@ class MainActivity : AppCompatActivity() {
     lateinit var recyclerView : RecyclerView
     lateinit var adapter : HoroscopeAdapter
 
+
+    override fun onResume() {
+        super.onResume()
+        // adapter recoge el click pero o sabe que hacer
+        //recibe un solo parametro
+
+        adapter = HoroscopeAdapter(horoscopeList){ position ->
+            val horoscope = horoscopeList[position]
+
+            //Toast.makeText(this, horoscopo.name,Toast.LENGTH_SHORT).show()
+            // DetailActivity::class.java -> pasa el tipo de la clase , no el objeto
+
+            val intent = Intent(this, DetailActivity::class.java)
+            intent.putExtra(DetailActivity.EXTRA_HOROSCOPE_ID, horoscope.id)
+            startActivity(intent)
+
+
+        }
+
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -35,22 +58,6 @@ class MainActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recycledView)
 
-
-        // adapter recoge el click pero o sabe que hacer
-        //recibe un solo parametro
-        adapter = HoroscopeAdapter(horoscopeList){ position ->
-            val horoscope = horoscopeList[position]
-
-            //Toast.makeText(this, horoscopo.name,Toast.LENGTH_SHORT).show()
-
-            // DetailActivity::class.java -> pasa el tipo de la clase , no el objeto
-            val intent = Intent(this, DetailActivity::class.java)
-            intent.putExtra(DetailActivity.EXTRA_HOROSCOPE_ID, horoscope.id)
-            startActivity(intent)
-        }
-
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -69,8 +76,9 @@ class MainActivity : AppCompatActivity() {
 //                Log.i("SEARCH",newText)
                 // se filtra sobre la lista original
                 horoscopeList = Horoscope.horoscopeList.filter {
-                    getString(it.name).contains(newText, ignoreCase = true)
+                    getString(it.name).contains(newText,true)
                 }
+
                 adapter.updateIt(horoscopeList)
                 return false
             }

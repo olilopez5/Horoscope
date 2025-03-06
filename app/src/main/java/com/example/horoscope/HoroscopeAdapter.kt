@@ -14,7 +14,8 @@ import com.example.horoscope.HoroscopeAdapter.HoroscopeViewHolder
 class HoroscopeAdapter(var items : List<Horoscope>, val onClick : (Int) -> Unit) : Adapter<HoroscopeViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HoroscopeViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_horoscope,parent,false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_horoscope, parent, false)
         return HoroscopeViewHolder(view)
     }
 
@@ -28,11 +29,10 @@ class HoroscopeAdapter(var items : List<Horoscope>, val onClick : (Int) -> Unit)
         holder.render(horoscope)
 
         //vista raiz de toda la celda, definido en view holder
-        holder.itemView.setOnClickListener{
+        holder.itemView.setOnClickListener {
             onClick(position)
             // depende del activity no del adapter para redireccionar, adapter recoge el click , es una buena práctica
         }
-
     }
 
     fun updateIt(items: List<Horoscope>) {
@@ -43,22 +43,23 @@ class HoroscopeAdapter(var items : List<Horoscope>, val onClick : (Int) -> Unit)
     }
 
 
-    class HoroscopeViewHolder(view : View) : ViewHolder(view) {
+    class HoroscopeViewHolder(view: View) : ViewHolder(view) {
 
-        val iconImageView : ImageView = view.findViewById(R.id.iconImageView)
-        val nameTextView : TextView = view.findViewById(R.id.nameTextView)
-        val dateTextView : TextView = view.findViewById(R.id.dateTextView)
+        val iconImageView: ImageView = view.findViewById(R.id.iconImageView)
+        val nameTextView: TextView = view.findViewById(R.id.nameTextView)
+        val dateTextView: TextView = view.findViewById(R.id.dateTextView)
+        val favImageView: ImageView = view.findViewById(R.id.favImageView)
 
-        fun render(horoscope: Horoscope){
+        fun render(horoscope: Horoscope) {
             iconImageView.setImageResource(horoscope.icon)
             nameTextView.setText(horoscope.name)
             dateTextView.setText(horoscope.dates)
 
-
+            if (SessionManager(itemView.context).isFav(horoscope.id)) {
+                favImageView.visibility = View.VISIBLE
+            } else {
+                favImageView.visibility = View.GONE
+            }
         }
-
     }
-
 }
-
-
