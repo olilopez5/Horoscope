@@ -4,7 +4,7 @@
     <item android:id="@+id/menu_favorite"
         android:icon="@drawable/ic_fav_star"
         android:title="@string/menu_favorite"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
     <item android:id="@+id/menu_hate"
         android:icon="@drawable/ic_fav_broken"
         android:title="@string/menu_favorite"
@@ -12,6 +12,6 @@
     <item android:id="@+id/menu_share"
         android:icon="@drawable/ic_share"
         android:title="@string/menu_share"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
 
 </menu>

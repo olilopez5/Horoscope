@@ -47,13 +47,13 @@ class HoroscopeAdapter(var items : List<Horoscope>, val onClick : (Int) -> Unit)
 
         val iconImageView: ImageView = view.findViewById(R.id.iconImageView)
         val nameTextView: TextView = view.findViewById(R.id.nameTextView)
-        val dateTextView: TextView = view.findViewById(R.id.dateTextView)
+        //val dateTextView: TextView = view.findViewById(R.id.dateTextView)
         val favImageView: ImageView = view.findViewById(R.id.favImageView)
 
         fun render(horoscope: Horoscope) {
             iconImageView.setImageResource(horoscope.icon)
             nameTextView.setText(horoscope.name)
-            dateTextView.setText(horoscope.dates)
+            //dateTextView.setText(horoscope.dates)
 
             if (SessionManager(itemView.context).isFav(horoscope.id)) {
                 favImageView.visibility = View.VISIBLE

@@ -23,7 +23,7 @@ class DetailActivity : AppCompatActivity() {
     lateinit var iconAcDet: ImageView
 
     lateinit var horoscope: Horoscope
-
+    var isHated = false
     var isFav = false
     private lateinit var favoriteMenu: MenuItem
 
@@ -46,6 +46,7 @@ class DetailActivity : AppCompatActivity() {
 
         //guardar el favorito en la sesion
         isFav = session.isFav(id)
+        isHated = session.isHated(id)
 
        initView()
 
@@ -68,15 +69,22 @@ class DetailActivity : AppCompatActivity() {
                     //Log.i("MENU","FAVORITOS")
                     //cambiar al estado contrario, niega un bool
                     isFav = !isFav
-                    if(isFav){
-                        session.setFav(horoscope.id)
-                    }else{
-                        session.setFav("")
-                    }
+                    isHated = !isHated
+                    //para varios favoritps
+                    session.setFav(horoscope.id,isFav)
+                    session.setHated(horoscope.id,isHated)
+//          un favorto
+//                    if(isFav){
+//                        session.setFav(horoscope.id)
+//                    }else{
+//                        session.setFav("")
+//                    }
                     //resultado , icono fav seleccionado o no
                     setFavIcon()
+                    setHatedIcon()
                     true
                 }
+
                 R.id.menu_share -> {
                     //Log.i("MENU","COMPARTIR")
                     val sendIntent = Intent()
@@ -87,6 +95,13 @@ class DetailActivity : AppCompatActivity() {
 
                     val shareIntent = Intent.createChooser(sendIntent, null)
                     startActivity(shareIntent)
+                    true
+                }
+
+                //captura el click y finish cierra el activity
+                android.R.id.home -> {
+                    finish()
+
                     true
                 }
                 else -> super.onContextItemSelected(item)
@@ -107,9 +122,14 @@ class DetailActivity : AppCompatActivity() {
         iconAcDet.setImageResource(horoscope.icon)
 
         isFav == session.isFav(horoscope.id)
+
+
     }
 
     private fun initView() {
+
+//habilitar boton volver por defecto
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // inicializa los datod cargados por id
         nameAcDet = findViewById(R.id.nameAcDet)
@@ -125,6 +145,16 @@ class DetailActivity : AppCompatActivity() {
         if (isFav){
             favoriteMenu.setIcon(R.drawable.ic_fav_selected)
         }else {
+            favoriteMenu.setIcon(R.drawable.ic_fav_star)
+        }
+
+    }
+
+    private fun setHatedIcon(){
+        if (isHated){
+            favoriteMenu.setIcon(R.drawable.ic_fav_broken)
+        }else {
+            //buscar icpno vacio
             favoriteMenu.setIcon(R.drawable.ic_fav_star)
         }
 
