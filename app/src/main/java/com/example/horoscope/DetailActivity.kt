@@ -2,6 +2,7 @@ package com.example.horoscope
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
@@ -10,6 +11,18 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.json.JSONObject
+import java.io.BufferedInputStream
+import java.io.BufferedReader
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
+
+
 
 
 class DetailActivity : AppCompatActivity() {
@@ -159,5 +172,53 @@ class DetailActivity : AppCompatActivity() {
         }
 
     }
+
+    private fun getHoroscopeLuck(){
+        CoroutineScope(Dispatchers.IO).launch {
+            val urlConnection: HttpURLConnection?
+            try {
+                val url =
+                    URL("https://horoscope-app-api.vercel.app/api/v1/get-horoscope/daily?sign=${horoscope.id}&day=TODAY");
+                urlConnection = url.openConnection() as HttpURLConnection
+
+                if (urlConnection.responseCode == 200) {
+                    val rd = BufferedReader(InputStreamReader(urlConnection.inputStream))
+                    var line: String? = " "
+                    val stringBuilder = StringBuilder()
+                    //throw new IOException("Invalid response from server: " + code);
+                    while ((line == rd.readLine().also { line = it }) != null) {
+                        stringBuilder.append(line)
+                    }
+                        val result = stringBuilder.toString()
+                    val jsonObject = JSONObject(result)
+                    val horoscopeLuck = jsonObject.getJSONObject("data").getString()
+                    
+                    //volver al hilo principal
+
+                    CoroutineScope(Dispatchers.Main).launch {
+                        horoscopeLuckTextView.text = horoscopeLuck
+                    }
+                    runOnUiThread {
+
+                    }
+                        Log.i("HTTP", result);
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace();
+                } finally {
+                    if (urlConnection != null) {
+                        urlConnection.disconnect();
+                    }
+                }
+
+                return null;
+            }
+        }
+
+
+
+        }
+
+
 
 }
