@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_daily"
+        android:enabled="true"
+        android:title="@string/menu_daily"/>
+
+    <item
+    android:id="@+id/menu_week"
+    android:enabled="true"
+    android:title="@string/menu_weekly"/>
+
+    <item
+        android:id="@+id/menu_month"
+        android:enabled="true"
+        android:title="@string/menu_monthly"/>
+
+</menu>

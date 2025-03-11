@@ -37,6 +37,12 @@
         android:textStyle="italic"
         android:padding="16dp"/>
 
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/linearProgress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -47,8 +53,20 @@
             android:layout_height="wrap_content"
             android:padding="16dp"
             tools:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:justificationMode="inter_word"/>
 
     </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:menu="@menu/menu_navigation" />
+
+    </LinearLayout>
 
 </LinearLayout>
