@@ -2,6 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="favorite_empty">#E4E0E0</color>
+
+    <color name="favorite_empty">#47434C</color>
     <color name="favorite_selected">#47434C</color>
+    <color name="search_icon">#47434C</color>
+    <color name="share_icon">#47434C</color>
+    <color name="hated_icon">#47434C</color>
+
 </resources>

@@ -2,7 +2,6 @@ package com.example.horoscope
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
@@ -15,14 +14,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import java.io.BufferedInputStream
 import java.io.BufferedReader
-import java.io.InputStream
 import java.io.InputStreamReader
-import java.net.HttpURLConnection
 import java.net.URL
-
-
+import javax.net.ssl.HttpsURLConnection
 
 
 class DetailActivity : AppCompatActivity() {
@@ -41,6 +36,7 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var favoriteMenu: MenuItem
 
     private lateinit var session: SessionManager
+    lateinit var horoscopeLuckTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,7 +90,7 @@ class DetailActivity : AppCompatActivity() {
 //                    }
                     //resultado , icono fav seleccionado o no
                     setFavIcon()
-                    setHatedIcon()
+                    //setHatedIcon()
                     true
                 }
 
@@ -134,9 +130,10 @@ class DetailActivity : AppCompatActivity() {
         dateAcDet.text = getString(horoscope.dates)
         iconAcDet.setImageResource(horoscope.icon)
 
-        isFav == session.isFav(horoscope.id)
+        isFav = session.isFav(horoscope.id)
 
 
+        getHoroscopeLuck ()
     }
 
     private fun initView() {
@@ -148,6 +145,7 @@ class DetailActivity : AppCompatActivity() {
         nameAcDet = findViewById(R.id.nameAcDet)
         dateAcDet = findViewById(R.id.dateAcDet)
         iconAcDet = findViewById(R.id.iconAcDet)
+        horoscopeLuckTextView = findViewById(R.id.horoscopeLuckTextView)
 
 //        findViewById<TextView>(R.id.nameAcDet).text = "${getString(horoscope.name)}"
 //        findViewById<TextView>(R.id.dateAcDet).text = "${getString(horoscope.dates)}"
@@ -158,7 +156,7 @@ class DetailActivity : AppCompatActivity() {
         if (isFav){
             favoriteMenu.setIcon(R.drawable.ic_fav_selected)
         }else {
-            favoriteMenu.setIcon(R.drawable.ic_fav_star)
+            favoriteMenu.setIcon(R.drawable.favorite_empty)
         }
 
     }
@@ -168,57 +166,45 @@ class DetailActivity : AppCompatActivity() {
             favoriteMenu.setIcon(R.drawable.ic_fav_broken)
         }else {
             //buscar icpno vacio
-            favoriteMenu.setIcon(R.drawable.ic_fav_star)
+            favoriteMenu.setIcon(R.drawable.favorite_empty)
         }
 
     }
 
-    private fun getHoroscopeLuck(){
+    private fun getHoroscopeLuck () {
         CoroutineScope(Dispatchers.IO).launch {
-            val urlConnection: HttpURLConnection?
+            var urlConnection: HttpsURLConnection? = null
+
             try {
-                val url =
-                    URL("https://horoscope-app-api.vercel.app/api/v1/get-horoscope/daily?sign=${horoscope.id}&day=TODAY");
-                urlConnection = url.openConnection() as HttpURLConnection
+                val url = URL("https://horoscope-app-api.vercel.app/api/v1/get-horoscope/daily?sign=${horoscope.id}&day=TODAY")
+                urlConnection = url.openConnection() as HttpsURLConnection
 
                 if (urlConnection.responseCode == 200) {
                     val rd = BufferedReader(InputStreamReader(urlConnection.inputStream))
-                    var line: String? = " "
+                    var line: String?
                     val stringBuilder = StringBuilder()
-                    //throw new IOException("Invalid response from server: " + code);
-                    while ((line == rd.readLine().also { line = it }) != null) {
+                    while ((rd.readLine().also { line = it }) != null) {
                         stringBuilder.append(line)
                     }
-                        val result = stringBuilder.toString()
+                    val result = stringBuilder.toString()
+
+                    // Instantiate a JSON object from the request response
                     val jsonObject = JSONObject(result)
-                    val horoscopeLuck = jsonObject.getJSONObject("data").getString()
-                    
-                    //volver al hilo principal
+                    val horoscopeLuck = jsonObject.getJSONObject("data").getString("horoscope_data")
 
                     CoroutineScope(Dispatchers.Main).launch {
                         horoscopeLuckTextView.text = horoscopeLuck
                     }
-                    runOnUiThread {
+                    /*runOnUiThread {
 
-                    }
-                        Log.i("HTTP", result);
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace();
-                } finally {
-                    if (urlConnection != null) {
-                        urlConnection.disconnect();
-                    }
+                    }*/
+                    //Log.i("HTTP", horoscopeLuck)
                 }
-
-                return null;
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                urlConnection?.disconnect()
             }
         }
-
-
-
-        }
-
-
-
+    }
 }

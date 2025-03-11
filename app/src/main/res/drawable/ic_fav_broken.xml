@@ -2,7 +2,8 @@
     android:width="800dp"
     android:height="800dp"
     android:viewportWidth="740.21"
-    android:viewportHeight="740.21">
+    android:viewportHeight="740.21"
+    android:tint="@color/hated_icon">
   <path
       android:pathData="M602.36,282.77l-0.03,-0.05c0.03,0.01 0.06,0.01 0.1,0.02C602.41,282.75 602.38,282.76 602.36,282.77z"
       android:fillColor="#48444D"/>
