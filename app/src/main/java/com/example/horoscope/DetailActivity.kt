@@ -145,12 +145,12 @@ class DetailActivity : AppCompatActivity() {
         linearProgress
 
 
-        getHoroscopeLuck (period = daily)
+        getHoroscopeLuck ("daily")
     }
 
     private fun initView() {
 
-//habilitar boton volver por defecto
+        //habilitar boton volver por defecto
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -162,10 +162,25 @@ class DetailActivity : AppCompatActivity() {
         bottomNavigationMenu = findViewById(R.id.bottomNavigationMenu)
         linearProgress = findViewById(R.id.linearProgress)
 
-//        findViewById<TextView>(R.id.nameAcDet).text = "${getString(horoscope.name)}"
-//        findViewById<TextView>(R.id.dateAcDet).text = "${getString(horoscope.dates)}"
-//        findViewById<ImageView>(R.id.iconAcDet).setImageResource(horoscope.icon)
+        bottomNavigationMenu.setOnItemSelectedListener { item ->
+            when(item.itemId) {
+                R.id.menu_daily -> {
+                    getHoroscopeLuck("daily")
+                    true
+                }
+                R.id.menu_week -> {
+                    getHoroscopeLuck("weekly")
+                    true
+                }
+                R.id.menu_month -> {
+                    getHoroscopeLuck("monthly")
+                    true
+                }
+                else -> false
+            }
+        }
     }
+
 
     private fun setFavIcon(){
         if (isFav){

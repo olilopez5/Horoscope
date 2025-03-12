@@ -37,6 +37,16 @@
         android:textStyle="italic"
         android:padding="16dp"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:menu="@menu/menu_navigation" />
+
+    </LinearLayout>
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/linearProgress"
         android:layout_width="match_parent"
@@ -58,15 +68,6 @@
 
     </ScrollView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomNavigationMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:menu="@menu/menu_navigation" />
 
-    </LinearLayout>
 
 </LinearLayout>
