@@ -141,10 +141,6 @@ class DetailActivity : AppCompatActivity() {
 
         isFav = session.isFav(horoscope.id)
 
-        bottomNavigationMenu
-        linearProgress
-
-
         getHoroscopeLuck ("daily")
     }
 
