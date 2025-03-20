@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.internal.NavigationMenu
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -61,7 +60,7 @@ class DetailActivity : AppCompatActivity() {
 
         //guardar el favorito en la sesion
         isFav = session.isFav(id)
-        isHated = session.isHated(id)
+        //isHated = session.isHated(id)
 
        initView()
 
@@ -84,10 +83,10 @@ class DetailActivity : AppCompatActivity() {
                     //Log.i("MENU","FAVORITOS")
                     //cambiar al estado contrario, niega un bool
                     isFav = !isFav
-                    isHated = !isHated
+                    //isHated = !isHated
                     //para varios favoritps
                     session.setFav(horoscope.id,isFav)
-                    session.setHated(horoscope.id,isHated)
+                    //session.setHated(horoscope.id,isHated)
 
 //                    un favorto
 //                    if(isFav){
@@ -126,8 +125,6 @@ class DetailActivity : AppCompatActivity() {
             }
 
     }
-
-
 
     private fun loadData() {
 
@@ -192,7 +189,7 @@ class DetailActivity : AppCompatActivity() {
             favoriteMenu.setIcon(R.drawable.ic_fav_broken)
         }else {
             //buscar icpno vacio
-            favoriteMenu.setIcon(R.drawable.favorite_empty)
+            favoriteMenu.setIcon(R.drawable.ic_fav_broken_selected)
         }
 
     }

@@ -31,9 +31,9 @@ class SessionManager(context: Context) {
         return sharedPref.getBoolean("${id}_favorite",false)
     }
 
-    fun isHated(id : String): Boolean {
-        //return id == getFav()
-        return sharedPref.getBoolean("${id}_hated",false)
-    }
+//    fun isHated(id : String): Boolean {
+//        //return id == getFav()
+//        return sharedPref.getBoolean("${id}_hated",false)
+//    }
 
 }
