@@ -2,6 +2,7 @@ package com.example.horoscope
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.horoscope.utils.HoroscopeTranslator
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import kotlinx.coroutines.CoroutineScope
@@ -37,6 +39,7 @@ class DetailActivity : AppCompatActivity() {
     var isHated = false
     var isFav = false
     private lateinit var favoriteMenu: MenuItem
+    private lateinit var translateMenu: MenuItem
 
     private lateinit var session: SessionManager
     lateinit var horoscopeLuckTextView: TextView
@@ -62,67 +65,83 @@ class DetailActivity : AppCompatActivity() {
         isFav = session.isFav(id)
         //isHated = session.isHated(id)
 
-       initView()
+        initView()
 
-       loadData()
-
+        loadData()
     }
 
+    // Inflar el menú en la ActionBar
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_activity_detail,menu)
+        menuInflater.inflate(R.menu.menu_activity_detail, menu)
 
-        favoriteMenu= menu.findItem(R.id.menu_favorite)
+        favoriteMenu = menu.findItem(R.id.menu_favorite)
         setFavIcon()
         return true
+
+        translateMenu = menu.findItem(R.id.menu_translate_ES)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-            return when (item.itemId) {
-                R.id.menu_favorite -> {
-                    //Log.i("MENU","FAVORITOS")
-                    //cambiar al estado contrario, niega un bool
-                    isFav = !isFav
-                    //isHated = !isHated
-                    //para varios favoritps
-                    session.setFav(horoscope.id,isFav)
-                    //session.setHated(horoscope.id,isHated)
+        return when (item.itemId) {
+            R.id.menu_favorite -> {
+                //Log.i("MENU","FAVORITOS")
+                //cambiar al estado contrario, niega un bool
+                isFav = !isFav
+                //isHated = !isHated
+                //para varios favoritps
+                session.setFav(horoscope.id, isFav)
 
-//                    un favorto
-//                    if(isFav){
-//                        session.setFav(horoscope.id)
-//                    }else{
-//                        session.setFav("")
-//                    }
-                    //resultado , icono fav seleccionado o no
-
-
-                    setFavIcon()
-                    //setHatedIcon()
-                    true
-                }
-
-                R.id.menu_share -> {
-                    //Log.i("MENU","COMPARTIR")
-                    val sendIntent = Intent()
-                    sendIntent.setAction(Intent.ACTION_SEND)
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, "Your luck is :")
-                    //MIME TYPE, el tipo del contenido y su extension
-                    sendIntent.setType("text/plain")
-
-                    val shareIntent = Intent.createChooser(sendIntent, null)
-                    startActivity(shareIntent)
-                    true
-                }
-
-                //captura el click y finish cierra el activity
-                android.R.id.home -> {
-                    finish()
-
-                    true
-                }
-                else -> super.onContextItemSelected(item)
+                R.id.menu_translate_ES
+                setFavIcon()
+                //setHatedIcon()
+                true
             }
+
+            R.id.menu_share -> {
+                //Log.i("MENU","COMPARTIR")
+                val sendIntent = Intent()
+                sendIntent.setAction(Intent.ACTION_SEND)
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Your luck is :")
+                //MIME TYPE, el tipo del contenido y su extension
+                sendIntent.setType("text/plain")
+
+                val shareIntent = Intent.createChooser(sendIntent, null)
+                startActivity(shareIntent)
+                true
+            }
+            // Manejar el clic en los ítems del menú
+            R.id.menu_translate_ES -> {
+                // Cuando se pulse el ícono de traducción, obtén el horóscopo y tradúcelo
+
+                val horoscopeText = horoscopeLuckTextView.text.toString()
+
+
+                val translator = HoroscopeTranslator()
+                translator.translateHoroscope(horoscopeText, object : HoroscopeTranslator.TranslateCallback {
+                    override fun onSuccess(translatedText: String?) {
+                        horoscopeLuckTextView.text = translatedText
+                    }
+
+                    override fun onFailure(errorMessage: String?) {
+                        if (errorMessage != null) {
+                            Log.w("MLKit", errorMessage)
+                        }
+                    }
+
+                })
+                return true
+            }
+
+            //captura el click y finish cierra el activity
+            android.R.id.home -> {
+                finish()
+
+                true
+            }
+
+            else -> super.onContextItemSelected(item)
+        }
 
     }
 
@@ -138,7 +157,7 @@ class DetailActivity : AppCompatActivity() {
 
         isFav = session.isFav(horoscope.id)
 
-        getHoroscopeLuck ("daily")
+        getHoroscopeLuck("daily")
     }
 
     private fun initView() {
@@ -156,50 +175,54 @@ class DetailActivity : AppCompatActivity() {
         linearProgress = findViewById(R.id.linearProgress)
 
         bottomNavigationMenu.setOnItemSelectedListener { item ->
-            when(item.itemId) {
+            when (item.itemId) {
                 R.id.menu_daily -> {
                     getHoroscopeLuck("daily")
                     true
                 }
+
                 R.id.menu_week -> {
                     getHoroscopeLuck("weekly")
                     true
                 }
+
                 R.id.menu_month -> {
                     getHoroscopeLuck("monthly")
                     true
                 }
+
                 else -> false
             }
         }
     }
 
 
-    private fun setFavIcon(){
-        if (isFav){
+    private fun setFavIcon() {
+        if (isFav) {
             favoriteMenu.setIcon(R.drawable.ic_fav_selected)
-        }else {
+        } else {
             favoriteMenu.setIcon(R.drawable.favorite_empty)
         }
 
     }
 
-    private fun setHatedIcon(){
-        if (isHated){
+    private fun setHatedIcon() {
+        if (isHated) {
             favoriteMenu.setIcon(R.drawable.ic_fav_broken)
-        }else {
+        } else {
             //buscar icpno vacio
             favoriteMenu.setIcon(R.drawable.ic_fav_broken_selected)
         }
 
     }
 
-    private fun getHoroscopeLuck (period: String) {
+    private fun getHoroscopeLuck(period: String) {
         CoroutineScope(Dispatchers.IO).launch {
             var urlConnection: HttpsURLConnection? = null
 
             try {
-                val url = URL("https://horoscope-app-api.vercel.app/api/v1/get-horoscope/$period?sign=${horoscope.id}&day=TODAY")
+                val url =
+                    URL("https://horoscope-app-api.vercel.app/api/v1/get-horoscope/$period?sign=${horoscope.id}&day=TODAY")
                 urlConnection = url.openConnection() as HttpsURLConnection
 
                 if (urlConnection.responseCode == 200) {
@@ -218,6 +241,9 @@ class DetailActivity : AppCompatActivity() {
                     CoroutineScope(Dispatchers.Main).launch {
                         horoscopeLuckTextView.text = horoscopeLuck
                         linearProgress.visibility = View.GONE
+
+                        //traducir
+                        //translate(horoscopeLuck)
                     }
                     /*runOnUiThread {
 
