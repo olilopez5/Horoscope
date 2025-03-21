@@ -40,6 +40,8 @@ class DetailActivity : AppCompatActivity() {
     var isFav = false
     private lateinit var favoriteMenu: MenuItem
     private lateinit var translateMenu: MenuItem
+    private lateinit var translateEsMenu: MenuItem
+    private lateinit var translateEnMenu: MenuItem
 
     private lateinit var session: SessionManager
     lateinit var horoscopeLuckTextView: TextView
@@ -76,9 +78,12 @@ class DetailActivity : AppCompatActivity() {
 
         favoriteMenu = menu.findItem(R.id.menu_favorite)
         setFavIcon()
-        return true
 
         translateMenu = menu.findItem(R.id.menu_translate_ES)
+        translateEsMenu = menu.findItem(R.id.menu_translate_ES)
+        translateEnMenu = menu.findItem(R.id.menu_translate_EN)
+        translateEnMenu.isEnabled = false
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -120,6 +125,9 @@ class DetailActivity : AppCompatActivity() {
                 translator.translateHoroscope(horoscopeText, object : HoroscopeTranslator.TranslateCallback {
                     override fun onSuccess(translatedText: String?) {
                         horoscopeLuckTextView.text = translatedText
+
+                        translateEsMenu.isEnabled = false
+                        translateEnMenu.isEnabled = true
                     }
 
                     override fun onFailure(errorMessage: String?) {
@@ -137,6 +145,9 @@ class DetailActivity : AppCompatActivity() {
                 if (originalHoroscopeText != null) {
                     // Lo mostramos
                     horoscopeLuckTextView.text = originalHoroscopeText
+
+                    translateEsMenu.isEnabled = true
+                    translateEnMenu.isEnabled = false
                 } else {
                     // Si no tenemos el texto original
                     Log.w("LANG", "No se ha cargado el horóscopo original aún.")
@@ -145,6 +156,7 @@ class DetailActivity : AppCompatActivity() {
             }
 
             //captura el click y finish cierra el activity
+
             android.R.id.home -> {
                 finish()
 
