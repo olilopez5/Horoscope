@@ -6,6 +6,8 @@ import com.google.mlkit.nl.translate.Translator
 class HoroscopeTranslator {
     // Crear el traductor de inglés a español
     private val translator: Translator = TranslationUtils.getEnglishToSpanishTranslator()
+    // volver al inglés
+
 
     // Traducir el texto
     fun translateHoroscope(horoscopeText: String?, callback: TranslateCallback) {

@@ -36,7 +36,7 @@ class DetailActivity : AppCompatActivity() {
     lateinit var iconAcDet: ImageView
 
     lateinit var horoscope: Horoscope
-    var isHated = false
+
     var isFav = false
     private lateinit var favoriteMenu: MenuItem
     private lateinit var translateMenu: MenuItem
@@ -85,16 +85,16 @@ class DetailActivity : AppCompatActivity() {
 
         return when (item.itemId) {
             R.id.menu_favorite -> {
-                //Log.i("MENU","FAVORITOS")
+                Log.i("MENU","FAVORITOS")
                 //cambiar al estado contrario, niega un bool
                 isFav = !isFav
-                //isHated = !isHated
+
                 //para varios favoritps
                 session.setFav(horoscope.id, isFav)
 
                 R.id.menu_translate_ES
                 setFavIcon()
-                //setHatedIcon()
+
                 true
             }
 
@@ -113,9 +113,8 @@ class DetailActivity : AppCompatActivity() {
             // Manejar el clic en los ítems del menú
             R.id.menu_translate_ES -> {
                 // Cuando se pulse el ícono de traducción, obtén el horóscopo y tradúcelo
-
                 val horoscopeText = horoscopeLuckTextView.text.toString()
-
+                //item.isEnabled = false
 
                 val translator = HoroscopeTranslator()
                 translator.translateHoroscope(horoscopeText, object : HoroscopeTranslator.TranslateCallback {
@@ -130,6 +129,18 @@ class DetailActivity : AppCompatActivity() {
                     }
 
                 })
+                return true
+            }
+
+            R.id.menu_translate_EN -> {
+                // texto original almacenado
+                if (originalHoroscopeText != null) {
+                    // Lo mostramos
+                    horoscopeLuckTextView.text = originalHoroscopeText
+                } else {
+                    // Si no tenemos el texto original
+                    Log.w("LANG", "No se ha cargado el horóscopo original aún.")
+                }
                 return true
             }
 
@@ -206,15 +217,8 @@ class DetailActivity : AppCompatActivity() {
 
     }
 
-    private fun setHatedIcon() {
-        if (isHated) {
-            favoriteMenu.setIcon(R.drawable.ic_fav_broken)
-        } else {
-            //buscar icpno vacio
-            favoriteMenu.setIcon(R.drawable.ic_fav_broken_selected)
-        }
-
-    }
+    // Almacenar el horóscopo original
+    var originalHoroscopeText: String? = null
 
     private fun getHoroscopeLuck(period: String) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -242,8 +246,8 @@ class DetailActivity : AppCompatActivity() {
                         horoscopeLuckTextView.text = horoscopeLuck
                         linearProgress.visibility = View.GONE
 
-                        //traducir
-                        //translate(horoscopeLuck)
+                        // Guardar el texto original
+                        originalHoroscopeText = horoscopeLuck
                     }
                     /*runOnUiThread {
 

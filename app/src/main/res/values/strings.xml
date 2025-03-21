@@ -31,7 +31,8 @@
     <string name="menu_search">Search</string>
     <string name="menu_favorite">Favorite</string>
     <string name="menu_share">Share</string>
-    <string name="menu_translate">Translate</string>
+    <string name="menu_translate_es">Translate_ES</string>
+    <string name="menu_translate_en">Translate_EN</string>
 
 
     <string name="menu_daily">Today</string>

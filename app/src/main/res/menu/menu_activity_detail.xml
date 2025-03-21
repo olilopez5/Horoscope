@@ -5,17 +5,17 @@
         android:icon="@drawable/favorite_empty"
         android:title="@string/menu_favorite"
         app:showAsAction="always"/>
-    <item android:id="@+id/menu_hate"
-        android:icon="@drawable/ic_fav_broken"
-        android:title="@string/menu_favorite"
-        app:showAsAction="never"/>
-    <item android:id="@+id/menu_share"
-        android:icon="@drawable/ic_share"
-        android:title="@string/menu_share"
+    <item android:id="@+id/menu_translate_EN"
+        android:icon="@drawable/ic_united_kingdom_flag"
+        android:title="@string/menu_translate_en"
         app:showAsAction="always"/>
     <item android:id="@+id/menu_translate_ES"
         android:icon="@drawable/ic_flag_spain"
-        android:title="@string/menu_translate"
+        android:title="@string/menu_translate_es"
         app:showAsAction="always"/>
+    <item android:id="@+id/menu_share"
+        android:icon="@drawable/ic_share"
+        android:title="@string/menu_share"
+        app:showAsAction="ifRoom"/>
 
 </menu>
